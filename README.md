@@ -1,9 +1,9 @@
 # Fargate auto connect to Route53
 
-Sometimes we want to make simple DNS registration for our service running on AWS Fargate. But it's not trivial task to do in automatic manner. 
-Following workaround could help to release such automation. 
+Sometimes we want to make simple DNS registration for our service running on AWS Fargate. But it's not so trivial task to do in automatic manner and without using Loadbalancers and/or other additional AWS services for this purpose only
+.
 
-All code in the repository are only template and **can't** be used as-is without editing. Has to be added to original service files and changed following to service's definition.
+Following workaround could help to reach such automation in the most simple way. 
 
 ### Dockerfile and entrypoint changes
 
@@ -14,9 +14,9 @@ All code in the repository are only template and **can't** be used as-is without
 
 ### Route53 registration script
 
-[route53.sh](https://github.com/denzalman/repo/blob/branch/route53.sh) "magic" description:
+[route53.sh](https://github.com/denzalman/fargate-route53-connect/blob/master/route53.sh) "magic" description:
 
-* Call the Task Metadata Endpoint to get current TaskARN and Cluster ID.
+* Call the Task Metadata End    point to get current TaskARN and Cluster ID.
 * Using those, call the ECS API to get attached network interface (ENI).
 * Call the EC2 API to get the details for the ENI, i.e. public IP address.
 * With public IP is possible to construct an UPSERT record that after will be sent to the Route53 API using the settings provided in the ECS Task definition.
@@ -56,3 +56,6 @@ Last step is to configure task definition with ECS environment variables which w
 R53_HOST=www.example.com
 R53_ZONEID=Z2YSP3XXXXXX
 ```
+
+---
+All code in the repository are only template and **can't** be used as-is without editing. Has to be added to original service files and changed following to service's definition.
